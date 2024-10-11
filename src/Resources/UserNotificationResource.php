@@ -105,9 +105,12 @@ class UserNotificationResource extends Resource
                 Tables\Columns\TextColumn::make('privacy')
                     ->label(trans('filament-alerts::messages.notifications.form.privacy'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('createdBy.name')
+                Tables\Columns\TextColumn::make('createdBy.username')
                     ->label(trans('filament-alerts::messages.notifications.form.createdBy'))
                     ->numeric()
+                    ->sortable(),
+                    Tables\Columns\TextColumn::make('template.type')
+                    ->label(trans('filament-alerts::messages.notifications.form.type'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(trans('filament-alerts::messages.notifications.form.created_at'))
