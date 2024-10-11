@@ -95,7 +95,7 @@ class UserNotificationResource extends Resource
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('model.name')
+                Tables\Columns\TextColumn::make('model.username')
                     ->label(trans('filament-alerts::messages.notifications.form.user'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('template.name')
