@@ -36,12 +36,12 @@ class UserNotificationResource extends Resource
     {
         return trans('filament-alerts::messages.notifications.title');
     }
-    
+
     public static function getLabel(): ?string
     {
         return trans('filament-alerts::messages.notifications.single');
     }
-    
+
     public static function getPluralLabel(): ?string
     {
         return trans('filament-alerts::messages.notifications.title');
@@ -59,7 +59,7 @@ class UserNotificationResource extends Resource
             ->schema([
                 Forms\Components\Select::make('template_id')
                     ->searchable()
-                    ->validationAttribute('template_id','required|exists:notifications_templates,id')
+                    ->validationAttribute('template_id', 'required|exists:notifications_templates,id')
                     ->label(trans('filament-alerts::messages.notifications.form.template'))
                     ->options(
                         NotificationsTemplate::pluck('name', 'id')->toArray()
@@ -85,7 +85,7 @@ class UserNotificationResource extends Resource
                     ->label(trans('filament-alerts::messages.notifications.form.user'))
                     ->searchable()
                     ->hidden(fn (Forms\Get $get): bool => $get('privacy') !== 'private')
-                    ->options(fn (Forms\Get $get) => $get('model_type') ? $get('model_type')::pluck('name', 'id')->toArray() : [])
+                    ->options(fn (Forms\Get $get) => $get('model_type') ? $get('model_type')::pluck('username', 'id')->toArray() : [])
                     ->required(),
             ]);
     }
