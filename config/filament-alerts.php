@@ -37,7 +37,7 @@ return [
     'provider' => "database",
 
     'models' => [
-        \App\Models\User::class => "Admins",
+        \App\Models\User::class => "Users",
     ],
 
     'providers' => [
