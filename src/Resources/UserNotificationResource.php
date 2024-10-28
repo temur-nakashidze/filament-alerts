@@ -75,6 +75,12 @@ class UserNotificationResource extends Resource
                     ->live()
                     ->required()
                     ->default('public'),
+                Forms\Components\Select::make('model_type')
+                    ->searchable()
+                    ->label(trans('filament-alerts::messages.notifications.form.user_type'))
+                    ->options(config('filament-alerts.models'))
+                    ->required()
+                    ->live(),
                 Forms\Components\Select::make('model_id')
                     ->label(trans('filament-alerts::messages.notifications.form.user'))
                     ->searchable()
