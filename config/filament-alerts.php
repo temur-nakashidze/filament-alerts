@@ -81,8 +81,8 @@ return [
     ],
 
     "lang" => [
-        "ar" => "arabic",
-        "en" => "english"
+        "en" => "english",
+        "ka" => "Georgien",
     ],
 
     "email" => [
