@@ -1,27 +1,20 @@
 <?php
-
 namespace TomatoPHP\FilamentAlerts;
 
 use Filament\Contracts\Plugin;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Actions\ActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Panel;
 use Filament\SpatieLaravelTranslatablePlugin;
-use Filament\Support\Facades\FilamentView;
-use Filament\View\PanelsRenderHook;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-use Illuminate\View\View;
 use Nwidart\Modules\Module;
+use TomatoPHP\FilamentAlerts\Pages\EmailSettingsPage;
+use TomatoPHP\FilamentAlerts\Pages\NotificationsSettingsPage;
 use TomatoPHP\FilamentAlerts\Resources\NotificationsLogsResource;
 use TomatoPHP\FilamentAlerts\Resources\NotificationsTemplateResource;
 use TomatoPHP\FilamentAlerts\Resources\UserNotificationResource;
-use TomatoPHP\FilamentAlerts\Pages\EmailSettingsPage;
-use TomatoPHP\FilamentAlerts\Pages\NotificationsSettingsPage;
 use TomatoPHP\FilamentSettingsHub\Facades\FilamentSettingsHub;
 use TomatoPHP\FilamentSettingsHub\Services\Contracts\SettingHold;
-
 
 class FilamentAlertsPlugin implements Plugin
 {
@@ -32,38 +25,38 @@ class FilamentAlertsPlugin implements Plugin
         return 'filament-alerts';
     }
 
-    public ?bool $useSettingHub = false;
+    public ?bool $useSettingHub             = false;
     public ?bool $hideNotificationsResource = false;
-    public ?array $types = [
+    public ?array $types                    = [
         [
-            "name" => "Alert",
-            "id" => "alert",
+            "name"  => "Alert",
+            "id"    => "alert",
             "color" => "#fff",
-            "icon" => "bx bxs-user"
+            "icon"  => "bx bxs-user",
         ],
         [
-            "name" => "Info",
-            "id" => "info",
+            "name"  => "Info",
+            "id"    => "info",
             "color" => "#fff",
-            "icon" => "bx bxs-user"
+            "icon"  => "bx bxs-user",
         ],
         [
-            "name" => "Danger",
-            "id" => "danger",
+            "name"  => "Danger",
+            "id"    => "danger",
             "color" => "#fff",
-            "icon" => "bx bxs-user"
+            "icon"  => "bx bxs-user",
         ],
         [
-            "name" => "Success",
-            "id" => "success",
+            "name"  => "Success",
+            "id"    => "success",
             "color" => "#fff",
-            "icon" => "bx bxs-user"
+            "icon"  => "bx bxs-user",
         ],
         [
-            "name" => "Warring",
-            "id" => "warring",
+            "name"  => "Warring",
+            "id"    => "warring",
             "color" => "#fff",
-            "icon" => "bx bxs-user"
+            "icon"  => "bx bxs-user",
         ],
     ];
     public ?array $models = [
@@ -71,70 +64,69 @@ class FilamentAlertsPlugin implements Plugin
     ];
     public ?array $providers = [
         [
-            "name" =>'Database',
-            "id" => "database"
+            "name" => 'Database',
+            "id"   => "database",
         ],
         [
-            "name" =>'Email',
-            "id" => "email"
+            "name" => 'Email',
+            "id"   => "email",
         ],
         [
             "name" => 'SMS Misr',
-            "id" => "sms-misr"
+            "id"   => "sms-misr",
         ],
         [
-            "name" =>'Slack',
-            "id" => "slack",
+            "name" => 'Slack',
+            "id"   => "slack",
         ],
         [
             "name" => 'Discord',
-            "id" => "discord"
+            "id"   => "discord",
         ],
         [
             "name" => 'Reverb',
-            "id" => "reverb"
+            "id"   => "reverb",
         ],
         [
             "name" => 'SMS MessageBird',
-            "id" => "sms-messagebird"
-        ]
+            "id"   => "sms-messagebird",
+        ],
 
     ];
     public ?array $lang = [
         "ar" => "arabic",
-        "en" => "english"
+        "en" => "english",
     ];
-    public ?bool $useDatabase = true;
-    public ?bool $useFCM = false;
-    public ?bool $useSlack = false;
-    public ?bool $useDiscord = false;
-    public ?bool $useReverb = false;
-    public ?bool $useEmail= true;
-    public ?bool $useSMSMisr = false;
+    public ?bool $useDatabase    = true;
+    public ?bool $useFCM         = false;
+    public ?bool $useSlack       = false;
+    public ?bool $useDiscord     = false;
+    public ?bool $useReverb      = false;
+    public ?bool $useEmail       = true;
+    public ?bool $useSMSMisr     = false;
     public ?bool $useMessageBird = false;
-    public ?string $apiModel = \App\Models\User::class;
+    public ?string $apiModel     = \App\Models\User::class;
 
     public function register(Panel $panel): void
     {
-        if(class_exists(Module::class) && \Nwidart\Modules\Facades\Module::find('FilamentAlerts')?->isEnabled()){
+        if (class_exists(Module::class) && \Nwidart\Modules\Facades\Module::find('FilamentAlerts')?->isEnabled()) {
             $this->isActive = true;
-        }
-        else {
+        } else {
             $this->isActive = true;
         }
 
-        if($this->isActive) {
+        if ($this->isActive) {
 
             $panel
                 ->plugin(SpatieLaravelTranslatablePlugin::make())
-                ->resources((!$this->hideNotificationsResource) ? [
+                ->resources((! $this->hideNotificationsResource) ? [
                     NotificationsLogsResource::class,
                     UserNotificationResource::class,
-                    NotificationsTemplateResource::class
+                    NotificationsTemplateResource::class,
                 ] : [])
                 ->pages($this->useSettingHub ? [
                     NotificationsSettingsPage::class,
-                    EmailSettingsPage::class
+                    EmailSettingsPage::class,
                 ] : []);
         }
 
@@ -226,7 +218,7 @@ class FilamentAlertsPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        if($this->isActive) {
+        if ($this->isActive) {
             if (class_exists(FilamentSettingsHub::class) && $this->useSettingHub) {
                 FilamentSettingsHub::register([
                     SettingHold::make()
@@ -245,29 +237,28 @@ class FilamentAlertsPlugin implements Plugin
                         ->group('filament-alerts::messages.settings.group'),
                 ]);
 
-
                 try {
                     Config::set('mail.mailers.smtp', [
-                        'transport' => setting('mail_mailer'),
-                        'host' => setting('mail_host'),
-                        'port' => setting('mail_port'),
+                        'transport'  => setting('mail_mailer'),
+                        'host'       => setting('mail_host'),
+                        'port'       => setting('mail_port'),
                         'encryption' => setting('mail_encryption'),
-                        'username' => setting('mail_username'),
-                        'password' => setting('mail_password'),
-                        'timeout' => null,
-                        'auth_mode' => null,
+                        'username'   => setting('mail_username'),
+                        'password'   => setting('mail_password'),
+                        'timeout'    => null,
+                        'auth_mode'  => null,
                     ]);
 
                     Config::set('mail.from', [
                         'address' => setting('mail_from_address'),
-                        'name' => setting('mail_from_name'),
+                        'name'    => setting('mail_from_name'),
                     ]);
 
                     Config::set('firebase.projects.app', [
                         'credentials' => env('FIREBASE_CREDENTIALS', public_path('storage/' . setting('fcm_cr'))),
-                        'database' => [
+                        'database'    => [
                             'url' => env('FIREBASE_DATABASE_URL', setting('fcm_database_url')),
-                        ]
+                        ],
                     ]);
 
                 } catch (\Exception $e) {
@@ -336,11 +327,11 @@ class FilamentAlertsPlugin implements Plugin
                 $this->providers = array_merge($this->providers, [
                     [
                         "name" => 'FCM Web',
-                        "id" => "fcm-web"
+                        "id"   => "fcm-web",
                     ],
                     [
                         "name" => 'FCM Mobile',
-                        "id" => "fcm-api"
+                        "id"   => "fcm-api",
                     ],
                 ]);
             }
