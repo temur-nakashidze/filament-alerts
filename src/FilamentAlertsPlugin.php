@@ -60,7 +60,7 @@ class FilamentAlertsPlugin implements Plugin
         ],
     ];
     public ?array $models = [
-        \App\Models\User::class => "Admins",
+        \App\Models\User::class => "Users",
     ];
     public ?array $providers = [
         [
